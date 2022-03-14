@@ -1,0 +1,22 @@
+---
+- name: get apt list 
+  shell: 'apt list --upgradeable'
+  register: apt_list
+
+- block:
+    - name: output folder
+      file:
+        path: "{{ ansible_env.PWD }}/output/"
+        state: directory
+
+    - name: store apt list
+      copy:
+        content: "{{ apt_list.stdout }}"
+        dest: "{{ ansible_env.PWD }}/output/{{ ansible_hostname }}_apt_list"
+
+  delegate_to: localhost
+
+- name: Upgrade all packages on servers
+  apt:
+    upgrade: dist
+    force_apt_get: yes

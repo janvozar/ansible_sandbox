@@ -1,0 +1,11 @@
+---
+- hosts: servers
+  become: true
+  become_user: root
+
+  tasks:
+    - include: example_deb.yml
+      when: ansible_os_family == 'Debian'
+
+    - include: example_rhel.yml
+      when: ansible_os_family == 'RedHat'
